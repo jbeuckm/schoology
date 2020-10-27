@@ -27,7 +27,7 @@ class SchoologyAPI {
   }
 
   getAuthHeaderComponents = (signatureMethod = 'PLAINTEXT', token = '') => {
-    const nonce = 'acb123' + Math.round(1000000 * Math.random())
+    const nonce = crypto.randomBytes(16).toString('base64')
     const timestamp = Math.round(new Date().getTime() / 1000)
 
     return {

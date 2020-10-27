@@ -22,7 +22,7 @@ const baseStringFormat = (components, joinChar = ',') => {
 class SchoologyAPI {
     constructor(client_key, client_secret, site_base = DEFAULT_SITE_BASE) {
         this.getAuthHeaderComponents = (signatureMethod = 'PLAINTEXT', token = '') => {
-            const nonce = 'acb123' + Math.round(1000000 * Math.random());
+            const nonce = crypto.randomBytes(16).toString('base64');
             const timestamp = Math.round(new Date().getTime() / 1000);
             return {
                 oauth_consumer_key: this.client_key,
