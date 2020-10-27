@@ -1,0 +1,20 @@
+{
+  "name": "schoology",
+  "version": "1.0.0",
+  "description": "Format requests to the Schoology API",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbeuckm/schoology.git"
+  },
+  "author": "Joseph Beuckman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jbeuckm/schoology/issues"
+  },
+  "homepage": "https://github.com/jbeuckm/schoology#readme"
+}
+
