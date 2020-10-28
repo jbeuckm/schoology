@@ -38,4 +38,4 @@ describe('SchoologyAPI', () => {
         }));
     }));
 });
-//# sourceMappingURL=SchoologySPI.spec.js.map
+//# sourceMappingURL=SchoologyAPI.spec.js.map
