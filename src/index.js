@@ -3,7 +3,8 @@ const crypto = require('crypto')
 import { parse, stringify } from 'query-string'
 
 const DEFAULT_SITE_BASE = 'https://www.schoology.com'
-const SCHOOLOGY_API_BASE = 'https://api.schoology.com/v1'
+const SCHOOLOGY_API_HOST = 'https://api.schoology.com'
+const SCHOOLOGYTEST_API_HOST = 'https://api.schoologytest.com'
 const REALM_PARAM = { 'OAuth realm': 'Schoology API' }
 
 const headerFormat = components => {
@@ -19,11 +20,15 @@ const baseStringFormat = (components, joinChar = ',') => {
 }
 
 class SchoologyAPI {
-  constructor(client_key, client_secret, site_base = DEFAULT_SITE_BASE) {
+  constructor(client_key, client_secret, site_base = DEFAULT_SITE_BASE, api_host = null) {
     this.client_key = client_key
     this.client_secret = client_secret
     this.site_base = site_base
-    this.api_base = SCHOOLOGY_API_BASE
+
+    const isTestSite = site_base.indexOf('schoologytest') !== -1
+
+    const _api_host = api_host || (isTestSite ? SCHOOLOGYTEST_API_HOST : SCHOOLOGY_API_HOST)
+    this.api_base = `${_api_host}/v1`
   }
 
   getAuthHeaderComponents = (signatureMethod = 'PLAINTEXT', token = '') => {
@@ -136,7 +141,13 @@ class SchoologyAPI {
   getAccessToken = requestToken => {
     requestToken && this.setToken(requestToken)
 
-    return this.makeRequest('get', '/oauth/access_token').then(data => parse(data))
+    return this.makeRequest('get', '/oauth/access_token').then(response => {
+      const token = parse(response.data)
+
+      this.setToken(token)
+
+      return token
+    })
   }
 
   getUserInfo = accessToken => {

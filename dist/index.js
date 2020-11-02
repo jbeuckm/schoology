@@ -7,7 +7,8 @@ const axios_1 = __importDefault(require("axios"));
 const crypto = require('crypto');
 const query_string_1 = require("query-string");
 const DEFAULT_SITE_BASE = 'https://www.schoology.com';
-const SCHOOLOGY_API_BASE = 'https://api.schoology.com/v1';
+const SCHOOLOGY_API_HOST = 'https://api.schoology.com';
+const SCHOOLOGYTEST_API_HOST = 'https://api.schoologytest.com';
 const REALM_PARAM = { 'OAuth realm': 'Schoology API' };
 const headerFormat = components => {
     const parts = [];
@@ -20,7 +21,7 @@ const baseStringFormat = (components, joinChar = ',') => {
     return parts.join('&');
 };
 class SchoologyAPI {
-    constructor(client_key, client_secret, site_base = DEFAULT_SITE_BASE) {
+    constructor(client_key, client_secret, site_base = DEFAULT_SITE_BASE, api_host = null) {
         this.getAuthHeaderComponents = (signatureMethod = 'PLAINTEXT', token = '') => {
             const nonce = crypto.randomBytes(16).toString('base64');
             const timestamp = Math.round(new Date().getTime() / 1000);
@@ -95,7 +96,11 @@ class SchoologyAPI {
         };
         this.getAccessToken = requestToken => {
             requestToken && this.setToken(requestToken);
-            return this.makeRequest('get', '/oauth/access_token').then(data => query_string_1.parse(data));
+            return this.makeRequest('get', '/oauth/access_token').then(response => {
+                const token = query_string_1.parse(response.data);
+                this.setToken(token);
+                return token;
+            });
         };
         this.getUserInfo = accessToken => {
             accessToken && this.setToken(accessToken);
@@ -104,7 +109,9 @@ class SchoologyAPI {
         this.client_key = client_key;
         this.client_secret = client_secret;
         this.site_base = site_base;
-        this.api_base = SCHOOLOGY_API_BASE;
+        const isTestSite = site_base.indexOf('schoologytest') !== -1;
+        const _api_host = api_host || (isTestSite ? SCHOOLOGYTEST_API_HOST : SCHOOLOGY_API_HOST);
+        this.api_base = `${_api_host}/v1`;
     }
 }
 exports.default = SchoologyAPI;
