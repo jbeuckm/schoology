@@ -142,7 +142,7 @@ class SchoologyAPI {
     requestToken && this.setToken(requestToken)
 
     return this.makeRequest('get', '/oauth/access_token').then(response => {
-      const token = parse(response.data)
+      const token = parse(response)
 
       this.setToken(token)
 

@@ -97,7 +97,7 @@ class SchoologyAPI {
         this.getAccessToken = requestToken => {
             requestToken && this.setToken(requestToken);
             return this.makeRequest('get', '/oauth/access_token').then(response => {
-                const token = query_string_1.parse(response.data);
+                const token = query_string_1.parse(response);
                 this.setToken(token);
                 return token;
             });

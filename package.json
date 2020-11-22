@@ -1,6 +1,6 @@
 {
   "name": "schoology",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Format requests to the Schoology API",
   "main": "dist/index.js",
   "scripts": {
