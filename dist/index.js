@@ -10,12 +10,12 @@ const DEFAULT_SITE_BASE = 'https://www.schoology.com';
 const SCHOOLOGY_API_HOST = 'https://api.schoology.com';
 const SCHOOLOGYTEST_API_HOST = 'https://api.schoologytest.com';
 const REALM_PARAM = { 'OAuth realm': 'Schoology API' };
-const headerFormat = components => {
+const headerFormat = (components) => {
     const parts = [];
     Object.keys(components).forEach(key => parts.push(key + '="' + components[key] + '"'));
     return parts.join(',');
 };
-const baseStringFormat = (components, joinChar = ',') => {
+const baseStringFormat = (components) => {
     const parts = [];
     Object.keys(components).forEach(key => parts.push(key + '=' + components[key]));
     return parts.join('&');
@@ -42,7 +42,7 @@ class SchoologyAPI {
         };
         this.getSignedAuthHeader = (method, url) => {
             const authHeaderComponents = this.getAuthHeaderComponents('HMAC-SHA1', this.oauth_token);
-            const baseString = [method.toUpperCase(), url, baseStringFormat(authHeaderComponents, '&')]
+            const baseString = [method.toUpperCase(), url, baseStringFormat(authHeaderComponents)]
                 .map(encodeURIComponent)
                 .join('&');
             const key = [this.client_secret, this.oauth_token_secret].join('&');
@@ -52,7 +52,7 @@ class SchoologyAPI {
                 .digest('base64');
             return headerFormat(Object.assign(Object.assign(Object.assign({}, REALM_PARAM), authHeaderComponents), { oauth_signature: signature }));
         };
-        this.setToken = token => {
+        this.setToken = (token) => {
             this.oauth_token = token.oauth_token;
             this.oauth_token_secret = token.oauth_token_secret;
         };
@@ -62,16 +62,16 @@ class SchoologyAPI {
                 headers: { Authorization },
                 method: 'get',
                 url: this.api_base + '/oauth/request_token',
-            }).then(response => {
+            }).then((response) => {
                 const token = query_string_1.parse(response.data);
                 this.setToken(token);
                 return token;
             });
         };
-        this.getConnectURL = returnUrl => {
+        this.getConnectURL = (returnUrl) => {
             return `${this.site_base}/oauth/authorize?oauth_token=${this.oauth_token}&return_url=${returnUrl}`;
         };
-        this.downloadFile = url => {
+        this.downloadFile = (url) => {
             const authHeader = this.getPlaintextAuthHeader();
             return axios_1.default({
                 method: 'get',
@@ -92,17 +92,17 @@ class SchoologyAPI {
                 method,
                 url,
                 data,
-            }).then(response => response.data);
+            }).then((response) => response.data);
         };
-        this.getAccessToken = requestToken => {
+        this.getAccessToken = (requestToken) => {
             requestToken && this.setToken(requestToken);
-            return this.makeRequest('get', '/oauth/access_token').then(response => {
+            return this.makeRequest('get', '/oauth/access_token').then((response) => {
                 const token = query_string_1.parse(response);
                 this.setToken(token);
                 return token;
             });
         };
-        this.getUserInfo = accessToken => {
+        this.getUserInfo = (accessToken) => {
             accessToken && this.setToken(accessToken);
             return this.makeRequest('get', '/app-user-info');
         };
