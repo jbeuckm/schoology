@@ -1,11 +1,13 @@
 {
   "name": "schoology",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Format requests to the Schoology API",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "prepublish": "tsc"
   },
   "repository": {
     "type": "git",
