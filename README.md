@@ -13,7 +13,7 @@ To consume the Schoology API, you'll need an API key and secret. Find these by l
 1. Instantiate the client like this:
 
    ```
-   import SchoologyAPI from 'schooology'
+   import SchoologyAPI from 'schoology'
 
    const client = new SchoologyAPI(key, secret,  site_base?, api_host?)
    ```
